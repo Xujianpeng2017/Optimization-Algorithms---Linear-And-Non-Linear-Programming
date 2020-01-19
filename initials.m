@@ -1,0 +1,14 @@
+function [X0,Y0,S0] = initials(A,b,c)
+y = (A*A')\(A*c); 
+[m,n] = size(A);
+s = c-A'*y;
+e = 1 + zeros(n,1);
+delta_s = max(-1.5*min(s),0);
+X = A'*((A*A')\b);
+delta_x = max(-1.5*min(X),0);
+prdct = 0.5*(X+delta_x*e)'*(s+delta_s*e);
+delta_x_c = delta_x+prdct/(sum(s)+n*delta_s);
+delta_s_c = delta_s+prdct/(sum(X)+n*delta_x);
+S0 = s+delta_s_c*e;
+Y0 = y;
+X0 = X+delta_x_c*e;
